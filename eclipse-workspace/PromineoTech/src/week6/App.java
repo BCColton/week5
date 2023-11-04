@@ -1,29 +1,69 @@
 package week6;
 
+import java.util.*;
+
 public class App {
 
 	public static void main(String[] args) {
+		Deck theDeck = new Deck();
+		Player PlayerOne = new Player("PlayerOne");
+		Player PlayerTwo = new Player("PlayerTwo");
+		
+		theDeck.shuffle();
+		theDeck.shuffle();		
+		
+		while (!theDeck.cards.isEmpty()) {
+			PlayerOne.draw(theDeck);
+			PlayerTwo.draw(theDeck);
+		}
+		
+		while (!PlayerOne.hand.isEmpty() && !PlayerTwo.hand.isEmpty()) {
+			PlayerOne.hand.get(0).describe();
+			PlayerTwo.hand.get(0).describe();
+			int difference = PlayerOne.flip().getValue() - PlayerOne.flip().getValue();
+			
+			if (difference > 0) { 
+				//PlayerOne has high card
+				PlayerOne.incrementScore();
+				System.out.println("Player One has scored a point.");
+			} else if (difference < 0) {
+				//PlayerTwo has high card
+				PlayerTwo.incrementScore();
+				System.out.println("Player Two has scored a point.");
+			} else {
+				System.out.println("Tie! No points awarded.");
+			}
+		}
+		
+		if (PlayerOne.score > PlayerTwo.score) {
+			System.out.println("Player One wins with a score of: " + PlayerOne.score);
+		} else if (PlayerOne.score < PlayerTwo.score) {
+			System.out.println("Player Two wins with a score of: " + PlayerTwo.score);
+		} else {
+			System.out.println("Draw!");
+		}
 		
 	}
-
+	
 }
 
+//Helper Class are below this comment
 class Card {
 	
 	
-	int value; //NOTE: Aces are high in this implementation so values go from 2 - 14
-	int suit; //0 - Clubs; 1 - Diamonds; 2 - Hearts; 3 - Spades 
-	String name; // this.value of this.suit
+	private int value; //NOTE: Aces are high in this implementation so values go from 2 - 14
+	private int suit; //0 - Clubs; 1 - Diamonds; 2 - Hearts; 3 - Spades 
+	private String name; // this.value of this.suit
 	
 	//
 	public Card(int v, int s) {
-		this.value = v;
-		this.suit = s;
+		setValue(v);
+		setSuit(s);
 		setName(decideName());
 	}
 	
 	public int getValue() {
-		return value;
+		return this.value;
 	}
 	
 	private void setValue(int value) {
@@ -47,7 +87,7 @@ class Card {
 	}
 	
 	public void describe() {
-		System.out.print(this.name);
+		System.out.println(this.name);
 	}
 	
 	private String decideName() {
@@ -104,6 +144,68 @@ class Card {
 	
 }
 
-class Hand {
+class Deck {
+
+	List<Card> cards = new ArrayList<>();
+	
+	//52 cards initialized in constructor
+	public Deck() {
+		for (int i = 2; i <= 14; i++) {
+			for (int j = 0; j <=3; j++) {
+				cards.add(new Card(i,j));
+			}
+		}
+	}
+	
+	//Implementation of a Fisher-Yates shuffle algorithm
+	public void shuffle() {
+		Random rand = new Random();
+		for(int i = this.cards.size() - 1; i >=0; i--) {
+			int j = rand.nextInt(0, i);
+			Card temp = cards.get(i);
+			cards.set(i, cards.get(j));
+			cards.set(j, temp);
+		}
+	}
+	
+	public Card draw() {
+		return cards.remove(0);
+	}
+	
+}
+
+class Player {
+	
+	List<Card> hand = new ArrayList<>();
+	int score;
+	String name;
+	
+	public Player (String name) {
+		this.name = name;
+		score = 0;
+	}
+	
+	public void describe() {
+		System.out.println(this.name + " has " + this.score + " point(s).");
+		System.out.println(this.name + "'s hand is:");
+		for(Card c: this.hand) { 
+			c.describe();
+		}
+	}
+	
+	public Card flip() {
+		return this.hand.remove(0);
+	}
+	
+	public void draw(Deck d) {
+		this.hand.add(d.draw());
+	}
+	
+	public void incrementScore() {
+		this.score++;
+	}
+	
+	
+	
 	
 }
