@@ -9,18 +9,24 @@ public class App {
 		Player PlayerOne = new Player("PlayerOne");
 		Player PlayerTwo = new Player("PlayerTwo");
 		
+
 		theDeck.shuffle();
 		theDeck.shuffle();		
+		
 		
 		while (!theDeck.cards.isEmpty()) {
 			PlayerOne.draw(theDeck);
 			PlayerTwo.draw(theDeck);
 		}
 		
+		int round = 0;
 		while (!PlayerOne.hand.isEmpty() && !PlayerTwo.hand.isEmpty()) {
+			System.out.println("Round: " + ++round);
+			System.out.print("Player One plays the ");
 			PlayerOne.hand.get(0).describe();
+			System.out.print("Player Two plays the ");
 			PlayerTwo.hand.get(0).describe();
-			int difference = PlayerOne.flip().getValue() - PlayerOne.flip().getValue();
+			int difference = PlayerOne.flip().getValue() - PlayerTwo.flip().getValue();
 			
 			if (difference > 0) { 
 				//PlayerOne has high card
@@ -36,9 +42,9 @@ public class App {
 		}
 		
 		if (PlayerOne.score > PlayerTwo.score) {
-			System.out.println("Player One wins with a score of: " + PlayerOne.score);
+			System.out.println("Player One wins with a score of: " + PlayerOne.score + " points");
 		} else if (PlayerOne.score < PlayerTwo.score) {
-			System.out.println("Player Two wins with a score of: " + PlayerTwo.score);
+			System.out.println("Player Two wins with a score of: " + PlayerTwo.score + " points");
 		} else {
 			System.out.println("Draw!");
 		}
@@ -160,7 +166,7 @@ class Deck {
 	//Implementation of a Fisher-Yates shuffle algorithm
 	public void shuffle() {
 		Random rand = new Random();
-		for(int i = this.cards.size() - 1; i >=0; i--) {
+		for(int i = this.cards.size() - 1; i > 0; i--) {
 			int j = rand.nextInt(0, i);
 			Card temp = cards.get(i);
 			cards.set(i, cards.get(j));
