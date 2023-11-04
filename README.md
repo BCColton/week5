@@ -1,1 +1,2 @@
-"# RecursionPractice_Java" 
+"# Repo for assignments for PromineoTech"
+
