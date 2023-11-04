@@ -5,6 +5,13 @@ import java.util.*;
 public class App {
 
 	public static void main(String[] args) {
+	
+		warGame();
+		
+		
+	}
+	
+	public static void warGame() {
 		Deck theDeck = new Deck();
 		Player PlayerOne = new Player("PlayerOne");
 		Player PlayerTwo = new Player("PlayerTwo");
@@ -48,10 +55,10 @@ public class App {
 		} else {
 			System.out.println("Draw!");
 		}
-		
-	}
 	
-}
+	}
+
+}	
 
 //Helper Class are below this comment
 class Card {
